@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nsf/termbox-go"
-	"life/entities"
+	"github.com/joeygibson/life/entities"
 	"os"
 )
 

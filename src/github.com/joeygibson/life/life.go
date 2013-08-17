@@ -61,12 +61,19 @@ func main() {
 	}
 
 	defer termbox.Close()
+	
+	// Get screen dimensions from terminal
+	termColumns, termRows := termbox.Size()
 
-	if *rows < 0 || *columns < 0 {
-		*columns, *rows = termbox.Size()
+	if *rows < 0  {
+		*rows = termRows - 2
 	}
 	
-	board := entities.NewBoard(*rows - 2, *columns - 2)
+	if *columns < 0 {
+		*columns = termColumns - 2 
+	}
+	
+	board := entities.NewBoard(*rows, *columns)
 
 	if *hackerSeed {
 		board.HackerEmblemSeed()

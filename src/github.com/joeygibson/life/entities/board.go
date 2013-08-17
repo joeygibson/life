@@ -24,12 +24,11 @@ SOFTWARE.
 package entities
 
 import (
-	"bytes"
 	"math/rand"
-	"strings"
 	"time"
 )
 
+// The board that the game is played on. Sizes set by user or terminal
 type Board struct {
 	Rows int
 	Columns int
@@ -37,16 +36,29 @@ type Board struct {
 	Cells [][]Cell
 }
 
+// Given a cell, this function will compute the 8 neighbors
+// surrounding the cell. If a neighbord is located off the board
+// it will wrap around to the other side.
 func (board Board) GetNeighbors(r, c int) []Cell {
 	var cells []Cell
 
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
 			newR, newC := r + i, c + j
+			
+			if newR >= board.Rows {
+				newR = 0
+			} else if newR < 0 {
+				newR = board.Rows -1
+			}
+			
+			if newC >= board.Columns {
+				newC = 0
+			} else if newC < 0 {
+				newC = board.Columns - 1
+			}
 
-			if newR >= 0 && newC >= 0 &&
-				newR < board.Rows && newC < board.Columns &&
-				!(newR == r && newC == c) {
+			if !(newR == r && newC == c) {
 				cells = append(cells, board.Cells[newR][newC])
 			}
 		}
@@ -55,6 +67,8 @@ func (board Board) GetNeighbors(r, c int) []Cell {
 	return cells
 }
 
+// Advance the board by one generation. A copy of the original board is
+// updated and returned.  
 func (board Board) Step() Board {
 	var newCells = createCells(board.Rows, board.Columns)
 
@@ -69,25 +83,7 @@ func (board Board) Step() Board {
 	return board
 }
 
-func (board Board) String() string {
-	var buf bytes.Buffer
-	
-	buf.WriteString(strings.Repeat("-", board.Columns + 2))
-	buf.WriteString("\n")
-	for r := 0; r < board.Rows; r++ {
-		buf.WriteString("|")
-		for c := 0; c < board.Columns; c++ {
-			buf.WriteString(board.Cells[r][c].String())
-		}
-		buf.WriteString("|\n")
-	}
-	buf.WriteString(strings.Repeat("-", board.Columns + 2))
-	buf.WriteString("\n")
-	
-	return buf.String()
-}
-
-
+// A seed that places a single Gosper's Glider on the board
 func (board *Board) HackerEmblemSeed() {
 	board.Cells[0][2].SetAlive(true)
 	board.Cells[1][0].SetAlive(true)
@@ -96,22 +92,7 @@ func (board *Board) HackerEmblemSeed() {
 	board.Cells[2][2].SetAlive(true)
 }
 
-func (board *Board) TwoIslandPseudoStillLifeSeed() {
-	board.Cells[1][0].SetAlive(true)
-	board.Cells[2][0].SetAlive(true)
-	board.Cells[4][0].SetAlive(true)
-	board.Cells[5][0].SetAlive(true)
-    board.Cells[2][1].SetAlive(true)
-    board.Cells[4][1].SetAlive(true)
-    board.Cells[2][2].SetAlive(true)
-    board.Cells[4][2].SetAlive(true)
-    board.Cells[1][3].SetAlive(true)
-    board.Cells[2][3].SetAlive(true)
-    board.Cells[4][3].SetAlive(true)
-    board.Cells[5][3].SetAlive(true)
-}
-
-// Pseudo-random seeding of the board
+// Pseudo-random seeding of the board. This may overseed it a bit...
 func (board *Board) Seed() {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	
@@ -128,6 +109,7 @@ func (board *Board) Seed() {
 	}
 }
 
+// Create the matrix that is the guts of the board.
 func createCells(Rows, Columns int) [][]Cell {
 	cells := make([][]Cell, Rows)
 	
@@ -139,6 +121,8 @@ func createCells(Rows, Columns int) [][]Cell {
 	return cells
 }
 
+// Factory function to create a new board of the given size. The board
+// that is returned has not yet been seeded.
 func NewBoard(Rows, Columns int) Board {
 	var board Board
 

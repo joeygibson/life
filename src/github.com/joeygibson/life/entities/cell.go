@@ -22,10 +22,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package entities
 
+// A single cell that is either alive or dead.
 type Cell struct {
 	alive bool
 }
 
+// Returns a character indicating whether it's alive or dead.
+// It's a rune, because termbox needed a rune, and not a string.
 func (c *Cell) Rune() rune {
 	if c.Alive() {
 		return '*'
@@ -34,22 +37,18 @@ func (c *Cell) Rune() rune {
 	}
 }	
 
-func (c *Cell) String() string {
-	if c.Alive() {
-		return "*"
-	} else {
-		return " "
-	}
-}
-
+// Is it alive?
 func (c *Cell) Alive() bool {
 	return c.alive
 }
 
+// Kill it or aliven it.
 func (c *Cell) SetAlive(al bool) {
 	c.alive = al
 }
 
+// This clones the cell, so that during the Step, the existing
+// board won't change
 func (c Cell) Copy() Cell {
 	var newCell Cell
 
@@ -58,6 +57,8 @@ func (c Cell) Copy() Cell {
 	return newCell
 }
 
+// Creates a copy of itself, and then sets it's alive/dead status
+// based on the alive/dead status of its neighbors
 func (c Cell) Step(neighbors []Cell) Cell {
 	var liveCount int
 	

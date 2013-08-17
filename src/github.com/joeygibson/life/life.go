@@ -39,7 +39,6 @@ var help = flag.Bool("h", false, "display help")
 var hackerSeed = flag.Bool("H", false, "seed with the hacker emblem")
 var sleepTime = flag.Int("w", 500, "milliseconds to sleep between iterations")
 var stopping = false
-var EventChan chan termbox.Event
 
 func Usage() {
 	fmt.Fprintf(os.Stderr, "Usage: life [options]\n")
@@ -60,55 +59,53 @@ func main() {
 		panic(err)
 	}
 
+	// Without this, the termainl screen will be all wonky
 	defer termbox.Close()
-	
+
 	// Get screen dimensions from terminal
 	termColumns, termRows := termbox.Size()
 
-	if *rows < 0  {
+	// If the user didn't specify a # of rows, use the terminal height
+	if *rows < 0 {
 		*rows = termRows - 2
 	}
-	
+
+	// If the user didn't specify a # of columns, use the terminal width
 	if *columns < 0 {
-		*columns = termColumns - 2 
+		*columns = termColumns - 2
 	}
-	
+
 	board := entities.NewBoard(*rows, *columns)
 
+	// If the user requested the Gosper's Glider seed, use that. Otherwise, go random.
 	if *hackerSeed {
 		board.HackerEmblemSeed()
 	} else {
 		board.Seed()
 	}
 
-	EventChan = make(chan termbox.Event)
-
 	termbox.SetInputMode(termbox.InputEsc)
 	termbox.HideCursor()
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
+	// This goroutine polls termbox for keypresses and signals the game
+	// to stop when the user presses Esc.
 	go func() {
 		for {
-			select {
-			case ev := <-EventChan:
-				if ev.Type == termbox.EventKey && ev.Key == termbox.KeyEsc {
-					stopping = true
-				}
-			default:
-				// nothing
-			}
-		}
-	}()
+			ev := termbox.PollEvent()
 
-	go func() {
-		for {
-			EventChan <- termbox.PollEvent()
+			if ev.Type == termbox.EventKey && ev.Key == termbox.KeyEsc {
+				stopping = true
+				break
+			}
 		}
 	}()
 
 	Play(board, *iterations)
 }
 
+// Plays the game. If the user didn't give an iteration count, we will
+// run it in an infinite loop
 func Play(board entities.Board, iterations int) {
 	if iterations < 0 {
 		for {
@@ -135,6 +132,8 @@ func Play(board entities.Board, iterations int) {
 	}
 }
 
+// This displays the board, using the termbox library. Each time the game's generation
+// is advanced, this function will redraw every cell, and the border.
 func displayBoard(board entities.Board) {
 	termbox.SetCell(0, 0, '\u250c', termbox.ColorDefault, termbox.ColorDefault)
 	for j := 0; j < board.Columns; j++ {
@@ -145,7 +144,7 @@ func displayBoard(board entities.Board) {
 	for i := 0; i < board.Rows; i++ {
 		termbox.SetCell(0, i+1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
 		for j := 0; j < board.Columns; j++ {
-			termbox.SetCell(j+1, i + 1, board.Cells[i][j].Rune(), termbox.ColorDefault, termbox.ColorDefault)
+			termbox.SetCell(j+1, i+1, board.Cells[i][j].Rune(), termbox.ColorDefault, termbox.ColorDefault)
 		}
 		termbox.SetCell(board.Columns+1, i+1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
 	}
@@ -159,6 +158,7 @@ func displayBoard(board entities.Board) {
 	termbox.Flush()
 }
 
+// Time to wait between generations. The default is 500 milliseconds.
 func Sleep() {
 	time.Sleep(time.Duration(*sleepTime) * time.Millisecond)
 }

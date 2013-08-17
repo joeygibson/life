@@ -7,7 +7,7 @@ The version on `master ` uses NCurses through the [termbox-go](https://github.co
 
     go get github.com/nsf/termbox-go
 
-After that, do a 
+Next, add the directory where you pulled termbox-go to, and the expanded life directory, to your $GOPATH and then run
 
     go install github.com/joeygibson/life
 

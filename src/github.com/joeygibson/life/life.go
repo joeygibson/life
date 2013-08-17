@@ -53,7 +53,11 @@ func main() {
 	if *help {
 		Usage()
 	}
+	
+	TermboxMain()
+}
 
+func TermboxMain() {
 	err := termbox.Init()
 	if err != nil {
 		panic(err)

@@ -24,7 +24,9 @@ SOFTWARE.
 package entities
 
 import (
+	"bytes"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -65,6 +67,24 @@ func (board Board) Step() Board {
 	board.Cells = newCells
 	
 	return board
+}
+
+func (board Board) String() string {
+	var buf bytes.Buffer
+	
+	buf.WriteString(strings.Repeat("-", board.Columns + 2))
+	buf.WriteString("\n")
+	for r := 0; r < board.Rows; r++ {
+		buf.WriteString("|")
+		for c := 0; c < board.Columns; c++ {
+			buf.WriteString(board.Cells[r][c].String())
+		}
+		buf.WriteString("|\n")
+	}
+	buf.WriteString(strings.Repeat("-", board.Columns + 2))
+	buf.WriteString("\n")
+	
+	return buf.String()
 }
 
 
@@ -116,15 +136,17 @@ func createCells(Rows, Columns int) [][]Cell {
 		cells[i] = row
 	}
 
+//	println("Rows:", len(cells))
+//	println("Cols:", len(cells[0]))
+	
 	return cells
 }
 
-func NewBoard(Rows, Columns int, SleepTime int) Board {
+func NewBoard(Rows, Columns int) Board {
 	var board Board
 
 	board.Rows = Rows
 	board.Columns = Columns
-	board.SleepTime = SleepTime
 	board.Cells = createCells(Rows, Columns)
 
 	return board

@@ -55,20 +55,24 @@ func main() {
 		Usage()
 	}
 
-	board := entities.NewBoard(*rows, *columns, *sleepTime)
-
-	if *hackerSeed {
-		board.HackerEmblemSeed()
-	} else {
-		board.Seed()
-	}
-
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
 	}
 
 	defer termbox.Close()
+
+	if *rows < 0 || *columns < 0 {
+		*columns, *rows = termbox.Size()
+	}
+	
+	board := entities.NewBoard(*rows - 2, *columns - 2)
+
+	if *hackerSeed {
+		board.HackerEmblemSeed()
+	} else {
+		board.Seed()
+	}
 
 	EventChan = make(chan termbox.Event)
 
@@ -104,10 +108,10 @@ func Play(board entities.Board, iterations int) {
 			if stopping {
 				return
 			}
-			
+
 			board = board.Step()
 			displayBoard(board)
-			
+
 			Sleep()
 		}
 	} else {
@@ -115,10 +119,10 @@ func Play(board entities.Board, iterations int) {
 			if stopping {
 				return
 			}
-			
+
 			board = board.Step()
 			displayBoard(board)
-			
+
 			Sleep()
 		}
 	}
@@ -126,25 +130,25 @@ func Play(board entities.Board, iterations int) {
 
 func displayBoard(board entities.Board) {
 	termbox.SetCell(0, 0, '\u250c', termbox.ColorDefault, termbox.ColorDefault)
-	for i := 0; i < board.Columns; i++ {
-		termbox.SetCell(i + 1, 0, '\u2500', termbox.ColorDefault, termbox.ColorDefault)
+	for j := 0; j < board.Columns; j++ {
+		termbox.SetCell(j+1, 0, '\u2500', termbox.ColorDefault, termbox.ColorDefault)
 	}
-	termbox.SetCell(board.Columns + 1, 0, '\u2510', termbox.ColorDefault, termbox.ColorDefault)
-	
+	termbox.SetCell(board.Columns+1, 0, '\u2510', termbox.ColorDefault, termbox.ColorDefault)
+
 	for i := 0; i < board.Rows; i++ {
-		termbox.SetCell(0, i + 1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
+		termbox.SetCell(0, i+1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
 		for j := 0; j < board.Columns; j++ {
-			termbox.SetCell(i + 1, j + 1, board.Cells[i][j].Rune(), termbox.ColorDefault, termbox.ColorDefault)
+			termbox.SetCell(j+1, i + 1, board.Cells[i][j].Rune(), termbox.ColorDefault, termbox.ColorDefault)
 		}
-		termbox.SetCell(board.Columns + 1, i + 1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
+		termbox.SetCell(board.Columns+1, i+1, '\u2502', termbox.ColorDefault, termbox.ColorDefault)
 	}
 
-	termbox.SetCell(0, board.Rows + 1, '\u2514', termbox.ColorDefault, termbox.ColorDefault)
+	termbox.SetCell(0, board.Rows+1, '\u2514', termbox.ColorDefault, termbox.ColorDefault)
 	for i := 0; i < board.Columns; i++ {
-		termbox.SetCell(i + 1, board.Columns + 1, '\u2500', termbox.ColorDefault, termbox.ColorDefault)
+		termbox.SetCell(i+1, board.Rows+1, '\u2500', termbox.ColorDefault, termbox.ColorDefault)
 	}
-	termbox.SetCell(board.Rows + 1, board.Columns + 1, '\u2518', termbox.ColorDefault, termbox.ColorDefault)
-	
+	termbox.SetCell(board.Columns+1, board.Rows+1, '\u2518', termbox.ColorDefault, termbox.ColorDefault)
+
 	termbox.Flush()
 }
 

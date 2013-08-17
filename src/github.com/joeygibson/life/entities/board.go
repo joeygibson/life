@@ -136,9 +136,6 @@ func createCells(Rows, Columns int) [][]Cell {
 		cells[i] = row
 	}
 
-//	println("Rows:", len(cells))
-//	println("Cols:", len(cells[0]))
-	
 	return cells
 }
 

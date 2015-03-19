@@ -3,9 +3,7 @@
 This is a simple, and probably naïve, implementation of [Conway's Game of Life](http://en.wikipedia.org/wiki/Conway%27s_game_of_life), written in [Go](http://golang.org/). 
 
 ## Dependencies
-The version on `master` uses NCurses through the [termbox-go](https://github.com/nsf/termbox-go) library. You'll need to fetch it with
-
-    go get github.com/nsf/termbox-go
+The version on `master` uses NCurses through the [termbox-go](https://github.com/nsf/termbox-go) library. The `go get` command below will fetch it, if you don't already have it.
 
 ## Installation
 Next, `get` this code and install it

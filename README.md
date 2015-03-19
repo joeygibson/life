@@ -10,7 +10,7 @@ The version on `master` uses NCurses through the [termbox-go](https://github.com
 ## Installation
 Next, `get` this code and install it
 
-    go install github.com/joeygibson/life
+    go get github.com/joeygibson/life
 
 and you will have an executable called `life` in the `$GOPATH/bin` directory.
 

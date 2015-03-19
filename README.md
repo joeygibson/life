@@ -14,3 +14,6 @@ Next, `get` this code and install it
 
 and you will have an executable called `life` in the `$GOPATH/bin` directory.
 
+## Running
+Just typing `life` will run a game with all parameters set to their defaults. You can run `life -h` to get a list of options and what their defaults are.
+

@@ -1,4 +1,5 @@
 # Conway's Game of Life in Go
+[![Build Status](https://travis-ci.org/joeygibson/life.svg?branch=master)](https://travis-ci.org/joeygibson/life)
 
 This is a simple, and probably naïve, implementation of [Conway's Game of Life](http://en.wikipedia.org/wiki/Conway%27s_game_of_life), written in [Go](http://golang.org/). 
 

@@ -5,5 +5,9 @@ go:
   - tip
   
 install:
-  - go get github.com/nsf/termbox-go
+  - go get -v github.com/Masterminds/glide
   
+script:
+  - glide install
+  - go vet $(go list ./... | grep -v /vendor/)
+  - go build

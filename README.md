@@ -18,6 +18,5 @@ Just typing `life` will run a game with all parameters set to their defaults. Yo
 
 
 ## Developing
-If you want to make changes to this library, the dependency info is in the `vendor` directory. Running `govendor sync` is the easiest way 
-to get the dependencies.
+If you want to make changes to this program, you'll need to run `glide install` to get the dependencies, if you don't already have them.
 

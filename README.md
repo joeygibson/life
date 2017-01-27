@@ -16,3 +16,8 @@ and you will have an executable called `life` in the `$GOPATH/bin` directory.
 ## Running
 Just typing `life` will run a game with all parameters set to their defaults. You can run `life -h` to get a list of options and what their defaults are.
 
+
+## Developing
+If you want to make changes to this library, the dependency info is in the `vendor` directory. Running `govendor sync` is the easiest way 
+to get the dependencies.
+

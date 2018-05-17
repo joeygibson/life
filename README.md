@@ -4,7 +4,8 @@
 This is a simple, and probably naïve, implementation of [Conway's Game of Life](http://en.wikipedia.org/wiki/Conway%27s_game_of_life), written in [Go](http://golang.org/). 
 
 ## Dependencies
-The version on `master` uses NCurses through the [termbox-go](https://github.com/nsf/termbox-go) library. The `go get` command below will fetch it, if you don't already have it.
+The version on `master` uses NCurses through the [termbox-go](https://github.com/nsf/termbox-go) 
+library. The `go get` command below will fetch it, if you don't already have it.
 
 ## Installation
 Next, `get` this code and install it
@@ -18,5 +19,5 @@ Just typing `life` will run a game with all parameters set to their defaults. Yo
 
 
 ## Developing
-If you want to make changes to this program, you'll need to run `glide install` to get the dependencies, if you don't already have them.
+If you want to make changes to this program, you'll need to run `dep ensure` to get the dependencies.
 

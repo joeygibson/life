@@ -1,4 +1,0 @@
-package: github.com/joeygibson/life
-import:
-- package: github.com/nsf/termbox-go
-  version: abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8

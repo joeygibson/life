@@ -30,10 +30,10 @@ import (
 
 // The board that the game is played on. Sizes set by user or terminal
 type Board struct {
-	Rows int
-	Columns int
+	Rows      int
+	Columns   int
 	SleepTime int
-	Cells [][]Cell
+	Cells     [][]Cell
 }
 
 // Given a cell, this function will compute the 8 neighbors
@@ -44,14 +44,14 @@ func (board Board) GetNeighbors(r, c int) []Cell {
 
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
-			newR, newC := r + i, c + j
-			
+			newR, newC := r+i, c+j
+
 			if newR >= board.Rows {
 				newR = 0
 			} else if newR < 0 {
-				newR = board.Rows -1
+				newR = board.Rows - 1
 			}
-			
+
 			if newC >= board.Columns {
 				newC = 0
 			} else if newC < 0 {
@@ -63,12 +63,12 @@ func (board Board) GetNeighbors(r, c int) []Cell {
 			}
 		}
 	}
-	
+
 	return cells
 }
 
 // Advance the board by one generation. A copy of the original board is
-// updated and returned.  
+// updated and returned.
 func (board Board) Step() Board {
 	var newCells = createCells(board.Rows, board.Columns)
 
@@ -79,7 +79,7 @@ func (board Board) Step() Board {
 	}
 
 	board.Cells = newCells
-	
+
 	return board
 }
 
@@ -95,16 +95,16 @@ func (board *Board) HackerEmblemSeed() {
 // Pseudo-random seeding of the board. This may overseed it a bit...
 func (board *Board) Seed() {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	
+
 	times := 0
-	
+
 	for times == 0 {
 		times = r.Intn(board.Rows * board.Columns)
 	}
-		
+
 	for t := 0; t < times; t++ {
 		i, j := rand.Intn(board.Rows), rand.Intn(board.Columns)
-		
+
 		board.Cells[i][j].SetAlive(true)
 	}
 }
@@ -112,7 +112,7 @@ func (board *Board) Seed() {
 // Create the matrix that is the guts of the board.
 func createCells(Rows, Columns int) [][]Cell {
 	cells := make([][]Cell, Rows)
-	
+
 	for i := 0; i < Rows; i++ {
 		row := make([]Cell, Columns)
 		cells[i] = row

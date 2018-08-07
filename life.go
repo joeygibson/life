@@ -53,7 +53,7 @@ func main() {
 	if *help {
 		Usage()
 	}
-	
+
 	TermboxMain()
 }
 

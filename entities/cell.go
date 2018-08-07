@@ -35,7 +35,7 @@ func (c *Cell) Rune() rune {
 	} else {
 		return ' '
 	}
-}	
+}
 
 // Is it alive?
 func (c *Cell) Alive() bool {
@@ -61,7 +61,7 @@ func (c Cell) Copy() Cell {
 // based on the alive/dead status of its neighbors
 func (c Cell) Step(neighbors []Cell) Cell {
 	var liveCount int
-	
+
 	for _, n := range neighbors {
 		if n.Alive() {
 			liveCount = liveCount + 1
@@ -69,7 +69,7 @@ func (c Cell) Step(neighbors []Cell) Cell {
 	}
 
 	newCell := c.Copy()
-	
+
 	if c.Alive() {
 		if liveCount < 2 || liveCount > 3 {
 			newCell.SetAlive(false)
@@ -82,4 +82,3 @@ func (c Cell) Step(neighbors []Cell) Cell {
 
 	return newCell
 }
-	

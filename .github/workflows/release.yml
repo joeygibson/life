@@ -4,9 +4,6 @@ on:
     tags:
       - 'v[0-9]+.*'
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
   create_release:
     name: Create release
@@ -36,10 +33,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
-      - name: Build and test
-        run: cargo test --verbose
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
       - name: Build for release
-        run: cargo build --verbose --release
+        run: go build
       - name: Set program name
         run: echo "PROGRAM_NAME=${GITHUB_REPOSITORY#joeygibson/}" >> $GITHUB_ENV
       - name: Generate binary name
